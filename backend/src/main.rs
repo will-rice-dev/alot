@@ -1,11 +1,13 @@
-use axum::{http::StatusCode, response::IntoResponse, routing::get, Json, Router};
+use axum::{http::StatusCode, response::IntoResponse, routing::post, Json, Router};
 use backend::login;
 use serde::{Deserialize, Serialize};
+use tower_http::cors::CorsLayer;
 
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .route("/v1/login", get(login_handler));
+        .route("/v1/login", post(login_handler))
+        .layer(CorsLayer::permissive());
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
         .await
