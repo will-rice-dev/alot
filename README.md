@@ -1,6 +1,5 @@
 # A Lot
 This is a pet project to make me use a bunch of new technologies. It is also an extremely belated present. Here is the planned setup:
-
 1. SvelteKit Front-End
     - TailWindCSS and DaisyUI for the styling
 2. Rust Back-End
@@ -11,9 +10,8 @@ This is a pet project to make me use a bunch of new technologies. It is also an 
 This is all subject to change still.
 
 ## Running
-Currently
-`cd backend; cargo run`
-
+Currently\
+`cd backend; cargo run`\
 `cd ../frontend; npm run dev`
 
 ## Todo list:
@@ -22,7 +20,7 @@ Currently
 - [x] DaisyUI setup with theme
 - [x] Login backend
 - [x] Login frontend
-- [ ] Make login JWT backend
+- [x] Make login JWT backend
 - [ ] Receive JWT frontend
 - [ ] Setup Docker
 - [ ] Setup MongoDB
