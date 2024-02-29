@@ -1,5 +1,7 @@
-use axum::{http::StatusCode, response::IntoResponse, routing::post, Json, Router};
-use backend::login;
+use axum::{routing::post, Json, Router};
+use backend::{jwt::{AuthBody, AuthError, Claims}, login};
+use chrono::{Duration, Local};
+use jsonwebtoken::{encode, EncodingKey, Header};
 use serde::{Deserialize, Serialize};
 use tower_http::cors::CorsLayer;
 
@@ -7,6 +9,7 @@ use tower_http::cors::CorsLayer;
 async fn main() {
     let app = Router::new()
         .route("/v1/login", post(login_handler))
+        .route("/v1/me", post(me_handler))
         .layer(CorsLayer::permissive());
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
@@ -16,17 +19,31 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
-async fn login_handler(Json(payload): Json<LoginPayload>) -> impl IntoResponse {
+async fn login_handler(Json(payload): Json<LoginPayload>) -> Result<Json<AuthBody>, AuthError> {
     if payload.password.is_empty() {
-        return StatusCode::BAD_REQUEST.into_response();
+        return Err(AuthError::MissingCredentials);
     }
     let attempt = login(&payload.password);
     if attempt.is_err() {
-        return StatusCode::BAD_REQUEST.into_response();
+        return Err(AuthError::MissingCredentials);
     } else if !attempt.unwrap() {
-        return StatusCode::UNAUTHORIZED.into_response();
+        return Err(AuthError::WrongCredentials)
     }
-    StatusCode::OK.into_response()
+    let claim = Claims {
+        sub: "Will_or".to_string(),
+        access: "Admin".to_string(),
+        exp: (Local::now() + Duration::hours(1)).timestamp() as usize,
+    };
+    let key = &EncodingKey::from_secret("secret".as_ref());
+    let token = match encode(&Header::default(), &claim, key) {
+        Ok(token) => token,
+        Err(_) => return Err(AuthError::TokenCreation), 
+    };
+    Ok(Json(AuthBody::new(token)))
+}
+
+async fn me_handler(claim: Claims) -> Result<String, AuthError> {
+    Ok(format!("Hey there {claim}"))
 }
 
 #[derive(Debug, Serialize, Deserialize)]

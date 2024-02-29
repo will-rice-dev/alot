@@ -1,3 +1,5 @@
+pub mod jwt;
+
 use std::{error::Error, fs};
 use pwhash::bcrypt;
 
