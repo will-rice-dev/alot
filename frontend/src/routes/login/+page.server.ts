@@ -1,21 +1,17 @@
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
 
-export const actions: Actions = {
-  default: async ({ request, cookies }) => {
-    console.log("Made it to actions");
+import bcrypt from "bcrypt";
+import { SECRET_LOGIN_HASH } from "$env/static/private";
 
+export const actions: Actions = {
+  default: async ({ request, cookies }) => {    
     const formData = await request.formData();
-    const password = formData.get("password");
-    const response = await fetch("http://127.0.0.1:3000/v1/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ password }),
-    });
-    console.log(response);
-    if (response.status === 200) {
+    const password = formData.get("password")?.toString();
+    if (password === undefined) return fail(400, {error: "Null password entered"});
+
+    const result = await bcrypt.compare(password, SECRET_LOGIN_HASH);
+    if (result) {
       // Password is correct, navigate to the main page
       cookies.set("sessionId", "userId", {
         httpOnly: true,
