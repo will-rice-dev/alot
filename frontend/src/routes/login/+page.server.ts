@@ -8,13 +8,8 @@ export const actions: Actions = {
   default: async ({ request, cookies }) => {    
     const formData = await request.formData();
     const password = formData.get("password")?.toString();
-    if (password === undefined) return fail(400, {error: "Null password entered"});
-
-    console.log(SECRET_LOGIN_HASH);
-    
-    const result = await bcrypt.compare(password, SECRET_LOGIN_HASH);
-    console.log(result);
-    
+    if (password === undefined) return fail(400, {error: "Null password entered"});    
+    const result = await bcrypt.compare(password, SECRET_LOGIN_HASH);    
     if (result) {
       // Password is correct, navigate to the main page
       cookies.set("sessionId", "userId", {
