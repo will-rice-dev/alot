@@ -1,0 +1,97 @@
+{
+  "id": "9116726b-e07b-431e-801c-0dfe57df9068",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "popsicles": {
+      "name": "popsicles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "idea": {
+          "name": "idea",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isFood": {
+          "name": "isFood",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "canOrderIn": {
+          "name": "canOrderIn",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "distance": {
+          "name": "distance",
+          "type": "distance",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cost": {
+          "name": "cost",
+          "type": "cost",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isGame": {
+          "name": "isGame",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "cost": {
+      "name": "cost",
+      "values": {
+        "$": "$",
+        "$$": "$$",
+        "$$$": "$$$",
+        "$$$$": "$$$$"
+      }
+    },
+    "distance": {
+      "name": "distance",
+      "values": {
+        "home": "home",
+        "walkable": "walkable",
+        "<10 minutes away": "<10 minutes away",
+        "10-20 minutes away": "10-20 minutes away",
+        "20-40 minutes away": "20-40 minutes away",
+        "40+ minutes away": "40+ minutes away"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
